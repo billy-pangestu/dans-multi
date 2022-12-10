@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: be-main-template
+  namespace: testing
+  labels:
+    app: be-main-template
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: be-main-template
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: be-main-template
+    spec:
+      imagePullSecrets:
+        - name: local
+      containers:
+        - name: be-main-template
+          image: docker.mncbank.co.id:5000/be-main-template:v1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP
+              name: 80tcp320341
+          env:
+            - name: ALLOW_SWAGGER
+              value: "true"
+            - name: Graylog_Host
+              value: 10.5.99.123
+            - name: Graylog_Port_Traffic
+              value: "12299"
+            - name: Graylog_Port_Error
+              value: "12299"
+            - name: MYSQL_NAME
+              value: "mncmbank"
+          envFrom:
+            - secretRef:
+                name: db-mysql
+            - secretRef:
+                name: aes-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    field.cattle.io/targetWorkloadIds: '["deployment:testing:be-main-template"]'
+    workload.cattle.io/targetWorkloadIdNoop: "true"
+    workload.cattle.io/workloadPortBased: "true"
+  name: be-main-template-nodeport
+  namespace: testing
+  labels:
+    cattle.io/creator: norman
+spec:
+  ports:
+  - name: be-main-template-port
+    nodePort: 32224
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: be-main-template
+  type: NodePort
