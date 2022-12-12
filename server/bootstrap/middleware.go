@@ -1,8 +1,8 @@
 package bootstrap
 
 import (
-	"skeleton-backend/pkg/str"
-	appMW "skeleton-backend/server/middleware"
+	"be-user-scheme/pkg/str"
+	appMW "be-user-scheme/server/middleware"
 )
 
 // RegisterMiddleware ...

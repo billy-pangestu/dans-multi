@@ -1,9 +1,9 @@
 package model
 
 import (
+	"be-user-scheme/helper"
+	"be-user-scheme/pkg/pg"
 	"database/sql"
-	"skeleton-backend/helper"
-	"skeleton-backend/pkg/pg"
 )
 
 var (

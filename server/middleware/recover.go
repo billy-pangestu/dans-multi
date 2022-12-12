@@ -4,10 +4,10 @@ package middleware
 // https://github.com/zenazn/goji/tree/master/web/middleware
 
 import (
+	apiHandler "be-user-scheme/server/handler"
 	"fmt"
 	"net/http"
 	"runtime/debug"
-	apiHandler "skeleton-backend/server/handler"
 
 	chiMW "github.com/go-chi/chi/middleware"
 )

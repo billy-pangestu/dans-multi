@@ -1,13 +1,13 @@
 package usecase
 
 import (
+	"be-user-scheme/helper"
+	"be-user-scheme/model"
+	"be-user-scheme/pkg/logruslogger"
+	"be-user-scheme/server/request"
+	"be-user-scheme/usecase/viewmodel"
 	"database/sql"
 	"errors"
-	"skeleton-backend/helper"
-	"skeleton-backend/model"
-	"skeleton-backend/pkg/logruslogger"
-	"skeleton-backend/server/request"
-	"skeleton-backend/usecase/viewmodel"
 	"time"
 )
 

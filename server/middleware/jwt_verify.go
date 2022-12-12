@@ -10,8 +10,8 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 
-	apiHandler "skeleton-backend/server/handler"
-	"skeleton-backend/usecase"
+	apiHandler "be-user-scheme/server/handler"
+	"be-user-scheme/usecase"
 )
 
 type jwtClaims struct {

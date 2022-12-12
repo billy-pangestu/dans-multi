@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	apiHandler "skeleton-backend/server/handler"
+	apiHandler "be-user-scheme/server/handler"
 
 	"github.com/go-chi/chi"
 )

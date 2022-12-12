@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"skeleton-backend/model"
-	"skeleton-backend/pkg/logruslogger"
-	"skeleton-backend/usecase/viewmodel"
+	"be-user-scheme/model"
+	"be-user-scheme/pkg/logruslogger"
+	"be-user-scheme/usecase/viewmodel"
 )
 
 // RoleUC ...

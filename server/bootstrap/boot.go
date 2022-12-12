@@ -1,10 +1,10 @@
 package bootstrap
 
 import (
-	"skeleton-backend/pkg/jwe"
-	"skeleton-backend/pkg/jwt"
-	"skeleton-backend/pkg/pg"
-	"skeleton-backend/usecase"
+	"be-user-scheme/pkg/jwe"
+	"be-user-scheme/pkg/jwt"
+	"be-user-scheme/pkg/pg"
+	"be-user-scheme/usecase"
 
 	"github.com/go-chi/chi"
 	ut "github.com/go-playground/universal-translator"

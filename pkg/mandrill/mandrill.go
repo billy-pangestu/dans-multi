@@ -1,12 +1,12 @@
 package mandrill
 
 import (
+	"be-user-scheme/pkg/file"
 	"bytes"
 	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"skeleton-backend/pkg/file"
 
 	"github.com/keighl/mandrill"
 )

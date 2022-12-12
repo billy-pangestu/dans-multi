@@ -36,7 +36,7 @@ func (m Connection) Connect() (*MySQL, error) {
 	}
 
 	// Enable Logger, show detailed log
-	db.LogMode(true)
+	// db.LogMode(true)
 
 	db.DB().SetConnMaxLifetime(5 * time.Minute)
 

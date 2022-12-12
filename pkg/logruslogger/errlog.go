@@ -10,7 +10,7 @@ import (
 
 const (
 	// TOPIC for setting topic of log
-	TOPIC = "skeleton-backend"
+	TOPIC = "be-user-scheme"
 	// ErrorLevel ...
 	ErrorLevel = log.ErrorLevel
 	// WarnLevel ...

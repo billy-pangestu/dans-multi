@@ -1,9 +1,9 @@
 package model
 
 import (
+	"be-user-scheme/helper"
+	"be-user-scheme/pkg/pg"
 	"database/sql"
-	"skeleton-backend/helper"
-	"skeleton-backend/pkg/pg"
 )
 
 // IUser ...
@@ -84,8 +84,8 @@ func (model userModel) Update(data UserEntity) (err error) {
 }
 
 // Delete ...
-func (model userModel) Delete(data UserEntity) (err error){
+func (model userModel) Delete(data UserEntity) (err error) {
 	err = model.DB.Model(&data).Update(&data).Error
-	
+
 	return
 }

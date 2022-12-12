@@ -1,10 +1,10 @@
 package usecase
 
 import (
+	"be-user-scheme/helper"
+	"be-user-scheme/pkg/logruslogger"
+	"be-user-scheme/usecase/viewmodel"
 	"errors"
-	"skeleton-backend/helper"
-	"skeleton-backend/pkg/logruslogger"
-	"skeleton-backend/usecase/viewmodel"
 
 	"github.com/rs/xid"
 )

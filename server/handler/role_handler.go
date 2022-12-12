@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"be-user-scheme/usecase"
 	"net/http"
-	"skeleton-backend/usecase"
 )
 
 // RoleHandler ...

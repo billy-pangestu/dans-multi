@@ -6,11 +6,11 @@ import (
 	"net/http"
 	"strings"
 
-	"skeleton-backend/pkg/jwe"
-	"skeleton-backend/pkg/jwt"
-	"skeleton-backend/pkg/pg"
-	"skeleton-backend/pkg/str"
-	"skeleton-backend/usecase"
+	"be-user-scheme/pkg/jwe"
+	"be-user-scheme/pkg/jwt"
+	"be-user-scheme/pkg/pg"
+	"be-user-scheme/pkg/str"
+	"be-user-scheme/usecase"
 
 	ut "github.com/go-playground/universal-translator"
 	validator "gopkg.in/go-playground/validator.v9"

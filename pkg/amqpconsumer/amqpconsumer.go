@@ -1,10 +1,10 @@
 package amqpconsumer
 
 import (
+	"be-user-scheme/usecase"
 	"errors"
 	"fmt"
 	"log"
-	"skeleton-backend/usecase"
 	"time"
 
 	"github.com/streadway/amqp"

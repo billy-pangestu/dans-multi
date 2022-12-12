@@ -1,11 +1,11 @@
 package middleware
 
 import (
+	"be-user-scheme/usecase"
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"skeleton-backend/usecase"
 	"sync"
 	"time"
 

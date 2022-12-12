@@ -1,15 +1,15 @@
 package main
 
 import (
-	"skeleton-backend/pkg/aes"
-	"skeleton-backend/pkg/aesfront"
-	"skeleton-backend/pkg/env"
-	"skeleton-backend/pkg/jwe"
-	"skeleton-backend/pkg/jwt"
-	"skeleton-backend/pkg/pg"
-	"skeleton-backend/pkg/str"
-	boot "skeleton-backend/server/bootstrap"
-	"skeleton-backend/usecase"
+	"be-user-scheme/pkg/aes"
+	"be-user-scheme/pkg/aesfront"
+	"be-user-scheme/pkg/env"
+	"be-user-scheme/pkg/jwe"
+	"be-user-scheme/pkg/jwt"
+	"be-user-scheme/pkg/pg"
+	"be-user-scheme/pkg/str"
+	boot "be-user-scheme/server/bootstrap"
+	"be-user-scheme/usecase"
 
 	"github.com/rs/cors"
 

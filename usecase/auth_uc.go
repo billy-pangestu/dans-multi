@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"skeleton-backend/pkg/logruslogger"
+	"be-user-scheme/pkg/logruslogger"
 )
 
 // AuthUC ...
@@ -9,7 +9,7 @@ type AuthUC struct {
 	*ContractUC
 }
 
-//Encrypted ...
+// Encrypted ...
 func (uc AuthUC) Encrypted(pin string) (res string, err error) {
 	ctx := "AuthUC.Encrypted"
 
@@ -32,7 +32,7 @@ func (uc AuthUC) Encrypted(pin string) (res string, err error) {
 	return res, err
 }
 
-//DecryptedOnly ...
+// DecryptedOnly ...
 func (uc AuthUC) DecryptedOnly(pin string) (res string, err error) {
 	ctx := "AuthUC.DecryptedOnly"
 

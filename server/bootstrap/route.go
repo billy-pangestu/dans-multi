@@ -1,9 +1,9 @@
 package bootstrap
 
 import (
-	"skeleton-backend/pkg/logruslogger"
-	api "skeleton-backend/server/handler"
-	"skeleton-backend/server/middleware"
+	"be-user-scheme/pkg/logruslogger"
+	api "be-user-scheme/server/handler"
+	"be-user-scheme/server/middleware"
 
 	chimiddleware "github.com/go-chi/chi/middleware"
 

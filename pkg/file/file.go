@@ -1,6 +1,7 @@
 package file
 
 import (
+	"be-user-scheme/pkg/str"
 	"bufio"
 	"encoding/base64"
 	"errors"
@@ -10,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"skeleton-backend/pkg/str"
 	"strings"
 
 	"github.com/rs/xid"

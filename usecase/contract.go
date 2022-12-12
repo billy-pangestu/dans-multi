@@ -1,20 +1,20 @@
 package usecase
 
 import (
+	"be-user-scheme/pkg/aesfront"
+	"be-user-scheme/pkg/logruslogger"
+	"be-user-scheme/pkg/pg"
 	"encoding/json"
 	"errors"
-	"skeleton-backend/pkg/aesfront"
-	"skeleton-backend/pkg/logruslogger"
-	"skeleton-backend/pkg/pg"
 	"time"
 
+	"be-user-scheme/pkg/aes"
+	"be-user-scheme/pkg/jwe"
+	"be-user-scheme/pkg/jwt"
+	"be-user-scheme/pkg/mandrill"
+	"be-user-scheme/pkg/wavecell"
+	"be-user-scheme/usecase/viewmodel"
 	"database/sql"
-	"skeleton-backend/pkg/aes"
-	"skeleton-backend/pkg/jwe"
-	"skeleton-backend/pkg/jwt"
-	"skeleton-backend/pkg/mandrill"
-	"skeleton-backend/pkg/wavecell"
-	"skeleton-backend/usecase/viewmodel"
 
 	"github.com/go-redis/redis/v7"
 	"github.com/minio/minio-go/v6"

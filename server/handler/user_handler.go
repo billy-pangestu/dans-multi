@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
-	"skeleton-backend/server/request"
-	"skeleton-backend/usecase"
+	"be-user-scheme/server/request"
+	"be-user-scheme/usecase"
 
 	validator "gopkg.in/go-playground/validator.v9"
 )

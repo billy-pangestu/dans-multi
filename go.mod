@@ -1,4 +1,4 @@
-module skeleton-backend
+module be-user-scheme
 
 go 1.18
 
