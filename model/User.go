@@ -2,183 +2,90 @@ package model
 
 import (
 	"database/sql"
-	"skeleton-backend/usecase/viewmodel"
-	"time"
-)
-
-var (
-	userSelectQuery = `SELECT def."id", def."first_name", def."last_name", def."unique_id", def."password", def."amount",
-	def."created_at", def."updated_at", def."deleted_at",
-	ur."name"
-	from users def
-	LEFT JOIN user_roles ur on ur.id = def.role_id `
+	"skeleton-backend/helper"
+	"skeleton-backend/pkg/pg"
 )
 
 // IUser ...
 type IUser interface {
-	FindByUniqueID(UniqueID string) (UserEntity, error)
+	FindAll() ([]UserEntity, error)
+	FindByUsername(username string) (UserEntity, error)
 	FindByID(id string) (UserEntity, error)
-	Store(data viewmodel.UserVM, now time.Time) (string, error)
-	AddFund(userID string, data viewmodel.UserVM, now time.Time) (string, error)
-	SubFund(userID string, data viewmodel.UserVM, now time.Time) (string, error)
-}
-
-// IUserWithoutTX ...
-type IUserWithoutTX interface {
-	FindByIDWithoutTX(id string) (UserEntity, error)
+	Store(data UserEntity) (UserEntity, error)
+	Update(data UserEntity) error
+	Delete(data UserEntity) error
 }
 
 // UserEntity ....
 type UserEntity struct {
-	ID        string         `db:"id"`
-	FirstName sql.NullString `db:"first_name"`
-	LastName  sql.NullString `db:"last_name"`
-	UniqueID  sql.NullString `db:"unique_id"`
-	Password  sql.NullString `db:"password"`
-	Amount    float64        `db:"amount"`
-	CreatedAt sql.NullString `db:"createdAt"`
-	UpdatedAt sql.NullString `db:"updatedAt"`
-	DeletedAt sql.NullString `db:"deletedAt"`
+	ID        string         `gorm:"id"`
+	FirstName sql.NullString `gorm:"first_name"`
+	LastName  sql.NullString `gorm:"last_name"`
+	Username  sql.NullString `gorm:"username"`
+	Password  sql.NullString `gorm:"password"`
+	CreatedAt sql.NullString `gorm:"createdAt"`
+	UpdatedAt sql.NullString `gorm:"updatedAt"`
+	DeletedAt sql.NullString `gorm:"deletedAt"`
+	RoleID    string         `gorm:"role_id"`
+}
 
-	UserRoleName sql.NullString `db:"user_role_name"`
+func (UserEntity) TableName() string {
+	return helper.UserDBName
 }
 
 // userModel ...
 type userModel struct {
-	DB *sql.Tx
+	DB *pg.MySQL
 }
 
 // NewUserModel ...
-func NewUserModel(db *sql.Tx) IUser {
-	return &userModel{DB: db}
+func NewUserModel(mysql *pg.MySQL) IUser {
+	return &userModel{
+		DB: mysql,
+	}
 }
 
-// userModelWithoutTX ...
-type userModelWithoutTX struct {
-	DB *sql.DB
-}
-
-// NewUserModel ...
-func NewUserModelWithoutTX(db *sql.DB) IUserWithoutTX {
-	return &userModelWithoutTX{DB: db}
-}
-
-func (model userModel) scanRows(rows *sql.Rows) (d UserEntity, err error) {
-	err = rows.Scan(
-		&d.ID, &d.FirstName, &d.LastName, &d.UniqueID, &d.Password, &d.Amount,
-		&d.CreatedAt, &d.UpdatedAt, &d.DeletedAt,
-		&d.UserRoleName,
-	)
-
-	return d, err
-}
-
-func (model userModel) scanRow(row *sql.Row) (d UserEntity, err error) {
-	err = row.Scan(
-		&d.ID, &d.FirstName, &d.LastName, &d.UniqueID, &d.Password, &d.Amount,
-		&d.CreatedAt, &d.UpdatedAt, &d.DeletedAt,
-		&d.UserRoleName,
-	)
-
-	return d, err
-}
-
-func (model userModelWithoutTX) scanRows(rows *sql.Rows) (d UserEntity, err error) {
-	err = rows.Scan(
-		&d.ID, &d.FirstName, &d.LastName, &d.UniqueID, &d.Password, &d.Amount,
-		&d.CreatedAt, &d.UpdatedAt, &d.DeletedAt,
-		&d.UserRoleName,
-	)
-
-	return d, err
-}
-
-func (model userModelWithoutTX) scanRow(row *sql.Row) (d UserEntity, err error) {
-	err = row.Scan(
-		&d.ID, &d.FirstName, &d.LastName, &d.UniqueID, &d.Password, &d.Amount,
-		&d.CreatedAt, &d.UpdatedAt, &d.DeletedAt,
-		&d.UserRoleName,
-	)
-
-	return d, err
+// FindByID ...
+func (model userModel) FindAll() (data []UserEntity, err error) {
+	err = model.DB.Find(&data).Error
+	return
 }
 
 // FindByID ...
 func (model userModel) FindByID(id string) (data UserEntity, err error) {
-	query := userSelectQuery +
-		` WHERE def."deleted_at" is null AND def."id"=$1`
+	query := `"id"=$1`
 
-	row := model.DB.QueryRow(query, id)
-	data, err = model.scanRow(row)
+	err = model.DB.Where(query, id).Find(&data).Error
 
-	return data, err
+	return
 }
 
-// FindByIDWithoutTX ...
-func (model userModelWithoutTX) FindByIDWithoutTX(id string) (data UserEntity, err error) {
-	query := userSelectQuery +
-		` WHERE def."deleted_at" is null AND def."id"=$1`
-	row := model.DB.QueryRow(query, id)
-	data, err = model.scanRow(row)
+// FindByUsername ...
+func (model userModel) FindByUsername(username string) (data UserEntity, err error) {
+	query := `"username"=$1`
 
-	return data, err
-}
+	err = model.DB.Where(query, username).Find(&data).Joins("Roles").Error
 
-//FindByUniqueID ...
-func (model userModel) FindByUniqueID(uniqueID string) (data UserEntity, err error) {
-	query := userSelectQuery +
-		` WHERE def."deleted_at" is null AND def."unique_id"=$1`
-	row := model.DB.QueryRow(query, uniqueID)
-	data, err = model.scanRow(row)
-
-	return data, err
+	return
 }
 
 // Store ...
-func (model userModel) Store(data viewmodel.UserVM, now time.Time) (res string, err error) {
-	query := `
-		INSERT INTO "users" (
-			"first_name", "last_name", "unique_id", "password", "role_id", 
-			"created_at", "updated_at"
-		)
-		VALUES (
-			$1, $2, $3, $4, $5,
-			$6, $6
-		)
-		RETURNING "id"
-	`
-	err = model.DB.QueryRow(query,
-		data.FirstName, data.LastName, data.UniqueID, data.Password, data.RoleID,
-		now,
-	).Scan(&res)
+func (model userModel) Store(data UserEntity) (res UserEntity, err error) {
+	err = model.DB.Save(&data).Find(&res).Error
 
-	return res, err
+	return
 }
 
-// AddFund ...
-func (model userModel) AddFund(userID string, data viewmodel.UserVM, now time.Time) (res string, err error) {
-	query := `
-		UPDATE "users" SET "amount" = amount+$1, "updated_at" = $2
-		WHERE "deleted_at" IS NULL AND "id" = $3 RETURNING "id"
-	`
-	err = model.DB.QueryRow(query,
-		data.Amount, now,
-		userID,
-	).Scan(&res)
+// Update ...
+func (model userModel) Update(data UserEntity) (err error) {
+	err = model.DB.Model(&data).Update(&data).Error
 
-	return res, err
+	return
 }
 
-// SubFund ...
-func (model userModel) SubFund(userID string, data viewmodel.UserVM, now time.Time) (res string, err error) {
-	query := `
-		UPDATE "users" SET "amount" = amount-$1, "updated_at" = $2
-		WHERE "deleted_at" IS NULL AND "id" = $3 RETURNING "id"
-	`
-	err = model.DB.QueryRow(query,
-		data.Amount, now,
-		userID,
-	).Scan(&res)
-
-	return res, err
+// Delete ...
+func (model userModel) Delete(data UserEntity) (err error){
+	err = model.DB.Model(&data).Update(&data).Error
+	
+	return
 }

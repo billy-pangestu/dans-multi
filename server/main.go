@@ -185,7 +185,7 @@ func main() {
 	// Register folder for a go static folder
 	workDir, _ := os.Getwd()
 	filesDir := filepath.Join(workDir, filePath)
-	fileServer(r, envConfig["FILE_PATH"], http.Dir(filesDir))
+	fileServer(r, envConfig["FILE_STATIC_FILE"], http.Dir(filesDir))
 
 	// Create static folder for html picture
 	filePath = envConfig["HTML_FILE_STATIC_FILE"]

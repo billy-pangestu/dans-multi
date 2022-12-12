@@ -3,9 +3,8 @@ package bootstrap
 import (
 	"skeleton-backend/pkg/jwe"
 	"skeleton-backend/pkg/jwt"
+	"skeleton-backend/pkg/pg"
 	"skeleton-backend/usecase"
-
-	"database/sql"
 
 	"github.com/go-chi/chi"
 	ut "github.com/go-playground/universal-translator"
@@ -18,7 +17,7 @@ type Bootup struct {
 	R          *chi.Mux
 	CorsDomain []string
 	EnvConfig  map[string]string
-	DB         *sql.DB
+	DB         *pg.MySQL
 	Redis      *redis.Client
 	Validator  *validator.Validate
 	Translator ut.Translator

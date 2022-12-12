@@ -5,6 +5,7 @@ import (
 	"errors"
 	"skeleton-backend/pkg/aesfront"
 	"skeleton-backend/pkg/logruslogger"
+	"skeleton-backend/pkg/pg"
 	"time"
 
 	"database/sql"
@@ -54,7 +55,7 @@ var AmqpChannel *amqp.Channel
 // ContractUC ...
 type ContractUC struct {
 	ReqID       string
-	DB          *sql.DB
+	DB          *pg.MySQL
 	Tx          *sql.Tx
 	AmqpConn    *amqp.Connection
 	AmqpChannel *amqp.Channel

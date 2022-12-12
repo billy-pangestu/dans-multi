@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"database/sql"
-
+	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 )
 
@@ -20,14 +19,26 @@ type Connection struct {
 	SslMode string
 }
 
+type MySQL struct {
+	*gorm.DB
+}
+
 // Connect ...
-func (m Connection) Connect() (*sql.DB, error) {
+func (m Connection) Connect() (*MySQL, error) {
 	connStr := fmt.Sprintf(
-		"postgres://%s:%s@%s:%d/%s?sslmode=%s&TimeZone=UTC",
-		m.User, m.Pass, m.Host, m.Port, m.DB, m.SslMode,
+		`host=%s user=%s password=%s port=%d dbname=%s sslmode=%s TimeZone=UTC`,
+		m.Host, m.User, m.Pass, m.Port, m.DB, m.SslMode,
 	)
 
-	db, err := sql.Open("postgres", connStr)
+	db, err := gorm.Open("postgres", connStr)
+	if err != nil {
+		panic(err)
+	}
 
-	return db, err
+	// Enable Logger, show detailed log
+	db.LogMode(true)
+
+	db.DB().SetConnMaxLifetime(5 * time.Minute)
+
+	return &MySQL{db}, err
 }

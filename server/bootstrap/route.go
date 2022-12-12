@@ -61,13 +61,20 @@ func (boot *Bootup) RegisterRoutes() {
 				r.Group(func(r chi.Router) {
 					r.Use(mJwt.VerifyJwtTokenCredential)
 					r.Get("/", userHandler.TokenHandler)
-					r.Post("/all", userHandler.TokenHandler)
+					r.Get("/all", userHandler.FindAllHandler)
 				})
 				r.Group(func(r chi.Router) {
 					r.Use(mJwt.VerifyJwtTokenAdminCredential)
 					r.Post("/create", userHandler.CreateHandler)
-					r.Put("/update", userHandler.AddFundHandler)
-					r.Delete("/delete", userHandler.AddFundHandler)
+					r.Put("/update", userHandler.UpdateHandler)
+					r.Delete("/delete", userHandler.DeleteHandler)
+				})
+			})
+
+			r.Route("/role", func(r chi.Router) {
+				roleHandler := api.RoleHandler{Handler: handlerType}
+				r.Group(func(r chi.Router) {
+					r.Get("/", roleHandler.FindAllHandler)
 				})
 			})
 		})

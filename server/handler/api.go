@@ -8,10 +8,9 @@ import (
 
 	"skeleton-backend/pkg/jwe"
 	"skeleton-backend/pkg/jwt"
+	"skeleton-backend/pkg/pg"
 	"skeleton-backend/pkg/str"
 	"skeleton-backend/usecase"
-
-	"database/sql"
 
 	ut "github.com/go-playground/universal-translator"
 	validator "gopkg.in/go-playground/validator.v9"
@@ -20,7 +19,7 @@ import (
 // Handler ...
 type Handler struct {
 	ContractUC *usecase.ContractUC
-	DB         *sql.DB
+	DB         *pg.MySQL
 	EnvConfig  map[string]string
 	Validate   *validator.Validate
 	Translator ut.Translator

@@ -9,17 +9,16 @@ require (
 	github.com/go-playground/locales v0.13.0
 	github.com/go-playground/universal-translator v0.17.0
 	github.com/go-redis/redis/v7 v7.2.0
+	github.com/jinzhu/gorm v1.9.16
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/joho/godotenv v1.3.0
 	github.com/keighl/mandrill v0.0.0-20170605120353-1775dd4b3b41
-	golang.org/x/sys v0.3.0
 	github.com/leekchan/accounting v0.0.0-20191218023648-17a4ce5f94d4
 	github.com/lestrrat/go-jwx v0.0.0-20180221005942-b7d4802280ae
 	github.com/lib/pq v1.7.0
 	github.com/minio/minio-go/v6 v6.0.57
 	github.com/rs/cors v1.7.0
 	github.com/rs/xid v1.2.1
-	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.5.0
 	github.com/spf13/viper v1.7.0
 	github.com/streadway/amqp v1.0.0
@@ -36,6 +35,7 @@ require (
 	github.com/fsnotify/fsnotify v1.4.7 // indirect
 	github.com/getsentry/raven-go v0.2.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.9 // indirect
 	github.com/klauspost/cpuid v1.2.3 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
@@ -52,11 +52,12 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24 // indirect
 	github.com/spf13/afero v1.1.2 // indirect
-	github.com/spf13/cast v1.3.0 // indirect
+	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/jwalterweatherman v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.3 // indirect
+	github.com/stretchr/testify v1.6.1 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
-	golang.org/x/net v0.0.0-20190923162816-aa69164e4478 // indirect
+	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/text v0.3.3 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect

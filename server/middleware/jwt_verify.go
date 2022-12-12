@@ -82,19 +82,7 @@ func (m VerifyMiddlewareInit) VerifyJwtTokenCredential(next http.Handler) http.H
 			return
 		}
 
-		// Check id in user table
-		userUc := usecase.UserUC{ContractUC: m.ContractUC}
-		user, err := userUc.FindByIDWithoutTX(jweRes["id"].(string), false)
-		if err != nil {
-			apiHandler.RespondWithJSON(w, 401, 401, "Invalid user token!", []map[string]interface{}{}, []map[string]interface{}{})
-			return
-		}
-
-		claimRes := map[string]interface{}{
-			"id": user.ID,
-		}
-
-		ctx := userContextInterface(r.Context(), r, "user", claimRes)
+		ctx := userContextInterface(r.Context(), r, "user", jweRes)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

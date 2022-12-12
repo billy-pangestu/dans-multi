@@ -4,8 +4,6 @@ import (
 	"net/http"
 	"strings"
 
-	"skeleton-backend/model"
-	"skeleton-backend/pkg/str"
 	"skeleton-backend/server/request"
 	"skeleton-backend/usecase"
 
@@ -32,26 +30,14 @@ func (h *UserHandler) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tx := model.SQLDBTx{DB: h.DB}
-	dbTx, err := tx.TxBegin()
-	h.ContractUC.Tx = dbTx.DB
-	if err != nil {
-		SendBadRequest(w, "Transaction")
-		return
-	}
-
 	userUc := usecase.UserUC{ContractUC: h.ContractUC}
 	res, err := userUc.Login(req)
 	if err != nil {
-
-		h.ContractUC.Tx.Rollback()
 		SendBadRequest(w, err.Error())
 		return
 	}
 
-	h.ContractUC.Tx.Commit()
 	SendSuccess(w, res, nil)
-	return
 }
 
 // LogoutHandler ...
@@ -65,25 +51,14 @@ func (h *UserHandler) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	user := requestIDFromContextInterface(r.Context(), "user")
 	userID := user["id"].(string)
 
-	tx := model.SQLDBTx{DB: h.DB}
-	dbTx, err := tx.TxBegin()
-	h.ContractUC.Tx = dbTx.DB
-	if err != nil {
-		SendBadRequest(w, "Transaction")
-		return
-	}
-
 	userUc := usecase.UserUC{ContractUC: h.ContractUC}
 	res, err := userUc.Logout(tokenAuth, userID)
 	if err != nil {
-		h.ContractUC.Tx.Rollback()
 		SendBadRequest(w, err.Error())
 		return
 	}
-	h.ContractUC.Tx.Commit()
 
 	SendSuccess(w, res, nil)
-	return
 }
 
 // TokenHandler ...
@@ -94,25 +69,29 @@ func (h *UserHandler) TokenHandler(w http.ResponseWriter, r *http.Request) {
 	user := requestIDFromContextInterface(r.Context(), "user")
 	userID := user["id"].(string)
 
-	tx := model.SQLDBTx{DB: h.DB}
-	dbTx, err := tx.TxBegin()
-	h.ContractUC.Tx = dbTx.DB
-	if err != nil {
-		SendBadRequest(w, "Transaction")
-		return
-	}
-
 	userUc := usecase.UserUC{ContractUC: h.ContractUC}
 	res, err := userUc.FindByID(userID, false)
 	if err != nil {
-		h.ContractUC.Tx.Rollback()
 		SendBadRequest(w, err.Error())
 		return
 	}
-	h.ContractUC.Tx.Commit()
 
 	SendSuccess(w, res, nil)
-	return
+}
+
+// FindAllHandler ...
+func (h *UserHandler) FindAllHandler(w http.ResponseWriter, r *http.Request) {
+	// Get logrus request ID
+	h.ContractUC.ReqID = getHeaderReqID(r)
+
+	userUc := usecase.UserUC{ContractUC: h.ContractUC}
+	res, err := userUc.FindAll()
+	if err != nil {
+		SendBadRequest(w, err.Error())
+		return
+	}
+
+	SendSuccess(w, res, nil)
 }
 
 // CreateHandler ...
@@ -122,81 +101,70 @@ func (h *UserHandler) CreateHandler(w http.ResponseWriter, r *http.Request) {
 
 	req := request.UserRequest{}
 	if err := h.Handler.Bind(r, &req); err != nil {
-
 		SendBadRequest(w, err.Error())
 		return
 	}
 	if err := h.Handler.Validate.Struct(req); err != nil {
-
 		h.SendRequestValidationError(w, err.(validator.ValidationErrors))
-		return
-	}
-
-	req.UniqueID = str.RandomNumericString(10)
-
-	tx := model.SQLDBTx{DB: h.DB}
-	dbTx, err := tx.TxBegin()
-	h.ContractUC.Tx = dbTx.DB
-	if err != nil {
-
-		SendBadRequest(w, "Transaction")
 		return
 	}
 
 	userUc := usecase.UserUC{ContractUC: h.ContractUC}
 	res, err := userUc.Create(req)
 	if err != nil {
-
-		h.ContractUC.Tx.Rollback()
 		SendBadRequest(w, err.Error())
 		return
 	}
 
-	h.ContractUC.Tx.Commit()
 	SendSuccess(w, res, nil)
-	return
 }
 
-// AddFund ...
-func (h *UserHandler) AddFundHandler(w http.ResponseWriter, r *http.Request) {
-
+// UpdateHandler ...
+func (h *UserHandler) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	// Get logrus request ID
 	h.ContractUC.ReqID = getHeaderReqID(r)
 
-	user := requestIDFromContextInterface(r.Context(), "user")
-	userID := user["id"].(string)
-
-	req := request.UserAddFundRequest{}
+	req := request.UserUpdateRequest{}
 	if err := h.Handler.Bind(r, &req); err != nil {
-
 		SendBadRequest(w, err.Error())
 		return
 	}
 	if err := h.Handler.Validate.Struct(req); err != nil {
-
 		h.SendRequestValidationError(w, err.(validator.ValidationErrors))
 		return
 	}
 
-	tx := model.SQLDBTx{DB: h.DB}
-	dbTx, err := tx.TxBegin()
-	h.ContractUC.Tx = dbTx.DB
-	if err != nil {
-
-		SendBadRequest(w, "Transaction")
-		return
-	}
-
 	userUc := usecase.UserUC{ContractUC: h.ContractUC}
-	res, err := userUc.AddFund(userID, req)
+	res, err := userUc.Update(req)
 	if err != nil {
-
-		h.ContractUC.Tx.Rollback()
 		SendBadRequest(w, err.Error())
 		return
 	}
 
-	h.ContractUC.Tx.Commit()
 	SendSuccess(w, res, nil)
-	return
+}
+
+// DeleteHandler ...
+func (h *UserHandler) DeleteHandler(w http.ResponseWriter, r *http.Request) {
+	// Get logrus request ID
+	h.ContractUC.ReqID = getHeaderReqID(r)
+
+	req := request.UserDeleteRequest{}
+	if err := h.Handler.Bind(r, &req); err != nil {
+		SendBadRequest(w, err.Error())
+		return
+	}
+	if err := h.Handler.Validate.Struct(req); err != nil {
+		h.SendRequestValidationError(w, err.(validator.ValidationErrors))
+		return
+	}
+
+	userUc := usecase.UserUC{ContractUC: h.ContractUC}
+	res, err := userUc.Delete(req)
+	if err != nil {
+		SendBadRequest(w, err.Error())
+		return
+	}
+
+	SendSuccess(w, res, nil)
 }
