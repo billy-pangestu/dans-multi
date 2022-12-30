@@ -71,10 +71,12 @@ func (boot *Bootup) RegisterRoutes() {
 				})
 			})
 
-			r.Route("/role", func(r chi.Router) {
-				roleHandler := api.RoleHandler{Handler: handlerType}
+			jobHandler := api.JobHandler{Handler: handlerType}
+			r.Route("/jobs", func(r chi.Router) {
 				r.Group(func(r chi.Router) {
-					r.Get("/", roleHandler.FindAllHandler)
+					r.Use(mJwt.VerifyJwtTokenCredential)
+					r.Get("/", jobHandler.FindAllHandler)
+					r.Get("/{id}", jobHandler.FindByIDHandler)
 				})
 			})
 		})
